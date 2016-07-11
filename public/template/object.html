@@ -1,6 +1,14 @@
 #block content
     <article class="object" data-id="${_id}">
+        <style>
+            .object-img {
+                width: 100%;
+                max-height: 500px;
+            }
+        </style>
         <h1>${name}</h1>
+
+        <img src="${img}" alt="${name}" class="object-img">
 
         <p itemprop="description" class="object-description">
             ${description}

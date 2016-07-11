@@ -36,8 +36,16 @@ class res {
     }
 
     error() {
-        this.statusCode = 500;
-        return this.render("error");
+        this.statusCode = 503;
+        clearTimeout(this.timeout);
+
+        return this.endBad(new Response("<h1>Service Unavailable</h1>", {
+            status:     this.statusCode,
+            statusText: 'Service Unavailable',
+            headers:    this.headers || new Headers({
+                'Content-Type': this['Content-Type']
+            })
+        }));
     }
 
     status(code) {
