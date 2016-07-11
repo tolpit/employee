@@ -30,6 +30,10 @@ Router.post = function(url, body, ...callbacks) {
     Router.use(url, 'POST', body, callbacks);
 };
 
+Router.delete = function(url, body, ...callbacks) {
+    Router.use(url, 'DELETE', body, callbacks);
+};
+
 Router.transform = function(url) {
     return new RegExp(url.replace(/(:[\w\n\S\s\t]*)/gi, '([\\w\\n\\S\\s]*)').replace(/\//g, '\\/') + "$");
 };

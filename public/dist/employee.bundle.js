@@ -268,6 +268,14 @@
 	    Router.use(url, 'POST', body, callbacks);
 	};
 	
+	Router.delete = function (url, body) {
+	    for (var _len4 = arguments.length, callbacks = Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
+	        callbacks[_key4 - 2] = arguments[_key4];
+	    }
+	
+	    Router.use(url, 'DELETE', body, callbacks);
+	};
+	
 	Router.transform = function (url) {
 	    return new RegExp(url.replace(/(:[\w\n\S\s\t]*)/gi, '([\\w\\n\\S\\s]*)').replace(/\//g, '\\/') + "$");
 	};
@@ -404,8 +412,16 @@
 	    }, {
 	        key: 'error',
 	        value: function error() {
-	            this.statusCode = 500;
-	            return this.render("error");
+	            this.statusCode = 503;
+	            clearTimeout(this.timeout);
+	
+	            return this.endBad(new Response("<h1>Service Unavailable</h1>", {
+	                status: this.statusCode,
+	                statusText: 'Service Unavailable',
+	                headers: this.headers || new Headers({
+	                    'Content-Type': this['Content-Type']
+	                })
+	            }));
 	        }
 	    }, {
 	        key: 'status',
@@ -886,24 +902,36 @@
 	    ONLINE: function ONLINE(req, res) {},
 	
 	    NetworkFirst: function NetworkFirst(req, res) {
-	        fetch(req).then(function (response) {
+	        return fetch(req).then(function (response) {
 	            var cacheCopy = response.clone();
 	
 	            caches.open(req.settings.version + "::" + req.settings.name).then(function add(cache) {
-	                cache.put(req, cacheCopy);
+	                cache.put(req, cacheCopy); //send it to the cache
 	            }).then(function () {
 	                // return res.network(response);
 	            });
 	
-	            return res.network(response);
+	            return res ? res.network(response) : response;
+	        }, function () {
+	            middlewares.unableToResolve(req, res);
+	        }).catch(function () {
+	            middlewares.unableToResolve(req, res);
 	        });
 	    },
 	
 	    CacheFirst: function CacheFirst(req, res) {
-	        return res.cache(caches.match(req));
+	        return caches.match(req).then(function (response) {
+	            if (response) return res.cache(response);else return middlewares.NetworkFirst(req, res);
+	        }).catch(function (err) {
+	            console.trace(err);
+	
+	            return middlewares.NetworkFirst(req, res);
+	        });
 	    },
 	
-	    unableToResolve: function unableToResolve(req, res) {}
+	    unableToResolve: function unableToResolve(req, res) {
+	        return res.error();
+	    }
 	
 	};
 	
