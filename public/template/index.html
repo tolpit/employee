@@ -1,0 +1,19 @@
+#block content
+    <h1>You are offline</h1>
+
+    <span data-id="${_id}">${_id}</span>
+
+    <p>You are ${name}</p>
+
+    <ul>
+        #for item in list
+        <li>${item}</li>
+        #endfor
+    </ul>
+
+    <a href="/object/1">Voir l'article</a>
+
+    #if text
+    <p>${text}</p>
+    #endif
+#endblock

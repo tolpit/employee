@@ -1,0 +1,61 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<section data-layer="manga" class="main-view">
+    <article data-id="${_id}" itemscope="" itemtype="http://schema.org/Book" class="manga manga--full">
+        <figure class="manga-wrapper">
+            <img src="https://s3-eu-west-1.amazonaws.com/manga-kiwi${couverture}" alt="${name}" itemprop="image" class="manga-img">
+            <figcaption data-resume="data-resume" class="manga-resume">Reprendre la lecture</figcaption>
+        </figure>
+        <h1 itemprop="name" class="manga-name">${name}</h1>
+        <button data-expand=".manga--full" class="btn-expand expand-manga">Détails</button>
+        <ul class="manga-details">
+            <li class="manga-info manga-auteur">
+                <span class="info-name">Auteur :</span>
+                <span itemprop="author" class="info-value">${auteur}</span>
+            </li>
+            <li class="manga-info manga-type">
+                <span class="info-name">Type :</span>
+                <span itemprop="genre" class="info-value">${type}</span>
+            </li>
+            <li class="manga-info">
+                <span class="info-name">Date de publication :</span>
+                <time class="info-value">1984</time>
+            </li>
+            <li class="manga-info">
+                <span class="info-name">Statut :</span>
+                <span class="info-value">${status}</span>
+            </li>
+            <li class="manga-info manga-description">
+                <span class="info-name">Description :</span>
+                <p itemprop="description" class="info-value">${description}</p>
+            </li>
+        </ul>
+    </article>
+    <ul class="volumes-list">
+        #for volume in volumes
+        <li data-id="${_id}" class="volume">
+            <ul class="volume-details">
+                <li class="volume-data">
+                    <img src="https://s3-eu-west-1.amazonaws.com/manga-kiwi${couverture}" class="volume-img">
+                    <h3 class="volume-name">${name} :</h3>
+                </li>
+                <li class="volume-main">
+                    <ul class="volume-chapters">
+                        #for chapter in chapters
+                        <li data-id="${_id}" class="chapter">
+                            <a href="https://manga.kiwi/manga/${slug}/${chapitre}" data-url="data-url" class="btn-view"></a>
+                            <span class="chapter-number">Chapitre ${chapitre}</span>
+                        </li>
+                        #endfor
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        #endfor
+    </ul>
+</section>
+</body>
+</html>
