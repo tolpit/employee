@@ -13,6 +13,7 @@ worker.set('version', 1.0);
 worker.set('views', '/template');
 worker.set('view engine', 'innocent'); //a parser who only parse plain text html, no access to the DOM inside the a service worker :/
 worker.set('timeout', 3000);
+worker.set('force render', true);
 
 DB.connect("test", [
     "data",

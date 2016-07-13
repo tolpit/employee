@@ -66,7 +66,7 @@ class employee {
     }
 
     setStaticBehavior(behavior) {
-        employee.Router.get(/\.(js|css|png|jpg|jpeg|map|html|xml|json|ico)/, behavior);
+        employee.Router.get(/\.(js|css|png|jpg|jpeg|gif|webm|webp|svg|map|html|xml|json|ico|woff|woff2|eot|ttf|otf|pdf)/, behavior);
     }
 
     handleInstall(event) {
@@ -100,21 +100,22 @@ class employee {
 
         request.settings = this.settings;
 
-        var middlewares = this.middlewares.concat(Router.match(request));
-        var index       = 0;
+        var mws = [];
 
-        while(index < middlewares.length) {
-            if(typeof middlewares[index] == "function") middlewares[index](request, response);
+        //Render when forced or when the user is offline
+        if(this.get('force render') || !navigator.onLine) {
+            mws = this.middlewares.concat(Router.match(request));
+        }
+        else {
+            mws = [middlewares.NetworkFirst];
+        }
+
+        var index = 0;
+
+        while(index < mws.length) {
+            if(typeof mws[index] == "function") mws[index](request, response);
             index++;
         }
-    }
-
-    OFFLINE(req, res, next) {
-
-    }
-
-    ONLINE(req, res, next) {
-
     }
 
 }

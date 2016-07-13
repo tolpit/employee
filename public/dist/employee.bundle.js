@@ -149,7 +149,7 @@
 	    }, {
 	        key: "setStaticBehavior",
 	        value: function setStaticBehavior(behavior) {
-	            employee.Router.get(/\.(js|css|png|jpg|jpeg|map|html|xml|json|ico)/, behavior);
+	            employee.Router.get(/\.(js|css|png|jpg|jpeg|gif|webm|webp|svg|map|html|xml|json|ico|woff|woff2|eot|ttf|otf|pdf)/, behavior);
 	        }
 	    }, {
 	        key: "handleInstall",
@@ -183,20 +183,22 @@
 	
 	            request.settings = this.settings;
 	
-	            var middlewares = this.middlewares.concat(_router2.default.match(request));
+	            var mws = [];
+	
+	            //Render when forced or when the user is offline
+	            if (this.get('force render') || !navigator.onLine) {
+	                mws = this.middlewares.concat(_router2.default.match(request));
+	            } else {
+	                mws = [_middlewares2.default.NetworkFirst];
+	            }
+	
 	            var index = 0;
 	
-	            while (index < middlewares.length) {
-	                if (typeof middlewares[index] == "function") middlewares[index](request, response);
+	            while (index < mws.length) {
+	                if (typeof mws[index] == "function") mws[index](request, response);
 	                index++;
 	            }
 	        }
-	    }, {
-	        key: "OFFLINE",
-	        value: function OFFLINE(req, res, next) {}
-	    }, {
-	        key: "ONLINE",
-	        value: function ONLINE(req, res, next) {}
 	    }]);
 	
 	    return employee;
