@@ -18,6 +18,12 @@ class res {
     }
 
     prepare() {
+        //base64 data
+        if(this.event && this.event.request.url.indexOf("data:")) {
+            this.done = true;
+            return;
+        }
+
         return new Promise((resolve, reject) => {
             this.endWell = resolve;
             this.endBad  = reject;
@@ -26,6 +32,8 @@ class res {
 
     send(body) {
         clearTimeout(this.timeout);
+
+        this.done = true;
 
         return this.endWell(new Response(body, {
             status: this.statusCode,
@@ -37,6 +45,7 @@ class res {
 
     error() {
         this.statusCode = 503;
+        this.done       = true;
         clearTimeout(this.timeout);
 
         return this.endBad(new Response("<h1>Service Unavailable</h1>", {

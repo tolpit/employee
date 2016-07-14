@@ -100,6 +100,8 @@ class employee {
 
         request.settings = this.settings;
 
+        if(response.done) return;
+
         var mws = [];
 
         //Render when forced or when the user is offline

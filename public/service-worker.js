@@ -13,27 +13,12 @@ worker.set('version', 1.0);
 worker.set('views', '/template');
 worker.set('view engine', 'innocent'); //a parser who only parse plain text html, no access to the DOM inside the a service worker :/
 worker.set('timeout', 3000);
-worker.set('force render', true);
+//worker.set('force render', true);
 
 DB.connect("test", [
     "data",
     "cache"
-], function() {
-    Store.require("data").save({
-        _id: "1",
-        name: "FooBar",
-        description: "Lorem Ipsum",
-        price: "100",
-        img: "https://pbs.twimg.com/media/CnEmFBUVIAET5Ts.jpg"
-    });
-    Store.require("data").save({
-        _id: "2",
-        name: "Trixted",
-        description: "Ipsum Lorem",
-        price: "50",
-        img: "https://pbs.twimg.com/media/CnElkZNWIAAqt_p.jpg"
-    });
-});
+]);
 
 worker.set('cache', [
     '/template/layout.html',

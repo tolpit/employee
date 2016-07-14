@@ -8,4 +8,16 @@ if('serviceWorker' in navigator) {
         });
 }
 
+var req = new XMLHttpRequest();
+
+req.onload = function() {
+    var img = document.createElement('img');
+        img.src = 'https://pbs.twimg.com/media/CnQCSU9W8AAJbCv.jpg';
+
+    document.body.appendChild(img);
+};
+
+req.open('GET', 'https://pbs.twimg.com/media/CnQCSU9W8AAJbCv.jpg');
+req.send(null);
+
 

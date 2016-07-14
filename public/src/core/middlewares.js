@@ -1,13 +1,5 @@
 const middlewares = {
 
-    OFFLINE: function(req, res) {
-
-    },
-
-    ONLINE: function(req, res) {
-
-    },
-
     NetworkFirst: function(req, res) {
         return fetch(req)
             .then((response) => {
