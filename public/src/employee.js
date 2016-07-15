@@ -95,12 +95,13 @@ class employee {
     }
 
     handleFetch(event) {
+        //base64 data
+        if(event && event.request.url.startsWith("data:")) return;
+
         var request     = event.request;
         var response    = new res(this, event);
 
         request.settings = this.settings;
-
-        if(response.done) return;
 
         var mws = [];
 

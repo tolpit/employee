@@ -1,7 +1,22 @@
 const middlewares = {
 
     NetworkFirst: function(req, res) {
-        return fetch(req)
+        Debug.log("network", req);
+
+        if(!navigator.onLine) return middlewares.CacheFirst(req, res);
+
+        var options = {
+            method: req.method,
+            headers: req.headers
+        };
+
+        if(req.mode && req.mode == "cors") {
+            options.mode = "cors";
+        }
+
+        Debug.log(options);
+
+        return fetch(req, options)
             .then((response) => {
                 var cacheCopy = response.clone();
 
@@ -9,9 +24,6 @@ const middlewares = {
                     .open(req.settings.version + "::" + req.settings.name)
                     .then(function add(cache) {
                         cache.put(req, cacheCopy); //send it to the cache
-                    })
-                    .then(function() {
-                        // return res.network(response);
                     });
 
                 return res ? res.network(response) : response;
@@ -24,6 +36,8 @@ const middlewares = {
     },
 
     CacheFirst: function(req, res) {
+        Debug.log("cache", req);
+
         return caches.match(req)
             .then((response) => {
                 if(response) return res.cache(response);

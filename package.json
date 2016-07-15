@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "pack": "webpack"
+    "pack": "webpack -w"
   },
   "dependencies": {
     "babel-core": "^6.10.4",

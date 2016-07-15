@@ -18,12 +18,6 @@ class res {
     }
 
     prepare() {
-        //base64 data
-        if(this.event && this.event.request.url.indexOf("data:")) {
-            this.done = true;
-            return;
-        }
-
         return new Promise((resolve, reject) => {
             this.endWell = resolve;
             this.endBad  = reject;
