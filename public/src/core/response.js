@@ -85,6 +85,7 @@ class res {
     }
 
     cache(res) {
+        Debug.log(res);
         return this.endWell(res);
     }
 

@@ -17,7 +17,7 @@ req.onload = function() {
     document.body.appendChild(img);
 };
 
-req.open('GET', 'https://pbs.twimg.com/media/CnQCSU9W8AAJbCv.jpg');
+req.open('GET', 'https://pbs.twimg.com/media/CnQCSU9W8AAJbCv.jpg', true);
 req.send(null);
 
 

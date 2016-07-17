@@ -5,26 +5,19 @@ const middlewares = {
 
         if(!navigator.onLine) return middlewares.CacheFirst(req, res);
 
-        var options = {
-            method: req.method,
-            headers: req.headers
-        };
-
-        if(req.mode && req.mode == "cors") {
-            options.mode = "cors";
-        }
-
-        Debug.log(options);
-
-        return fetch(req, options)
+        return fetch(req)
             .then((response) => {
                 var cacheCopy = response.clone();
 
-                caches
-                    .open(req.settings.version + "::" + req.settings.name)
-                    .then(function add(cache) {
-                        cache.put(req, cacheCopy); //send it to the cache
-                    });
+                Debug.log(response);
+
+                if(response.type !== "opaque") {
+                    caches
+                        .open(req.settings.version + "::" + req.settings.name)
+                        .then(function add(cache) {
+                            cache.put(req, cacheCopy); //send it to the cache
+                        });
+                }
 
                 return res ? res.network(response) : response;
             }, () => {
