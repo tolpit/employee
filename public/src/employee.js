@@ -98,25 +98,25 @@ class employee {
         //base64 data
         if(event && event.request.url.startsWith("data:")) return;
 
-        var request     = event.request.clone();
-        var response    = new res(this, event);
+        let request     = event.request.clone();
+        let response    = new res(this, event);
 
         request.settings = this.settings;
 
-        var mws = [];
+        let stack = [];
 
         //Render when forced or when the user is offline
         if(this.get('force render') || !navigator.onLine) {
-            mws = this.middlewares.concat(Router.match(request));
+            stack = this.middlewares.concat(Router.match(request));
         }
         else {
-            mws = [middlewares.NetworkFirst];
+            stack = [middlewares.NetworkFirst];
         }
 
-        var index = 0;
+        let index = 0;
 
-        while(index < mws.length) {
-            if(typeof mws[index] == "function") mws[index](request, response);
+        while(index < stack.length) {
+            if(typeof stack[index] == "function") stack[index](request, response);
             index++;
         }
     }

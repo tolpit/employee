@@ -3,7 +3,9 @@ const middlewares = {
     NetworkFirst: function(req, res) {
         Debug.log("network", req);
 
-        if(!navigator.onLine) return middlewares.CacheFirst(req, res);
+        if(!navigator.onLine && !res.notInCache) {
+            return middlewares.CacheFirst(req, res);
+        }
 
         return fetch(req)
             .then((response) => {
@@ -34,7 +36,10 @@ const middlewares = {
         return caches.match(req)
             .then((response) => {
                 if(response) return res.cache(response);
-                else return middlewares.NetworkFirst(req, res);
+                else {
+                    res.notInCache = true;
+                    return middlewares.NetworkFirst(req, res);
+                }
             })
             .catch((err) => {
                 console.trace(err);
