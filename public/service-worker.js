@@ -18,7 +18,13 @@ worker.set('timeout', 3000);
 DB.connect("test", [
     "data",
     "cache"
-]);
+], function(db) {
+    Store.require('data').save({
+        _id: 1,
+        name: "Foo Bar",
+        text: "Lorem ispum..."
+    })
+});
 
 worker.set('cache', [
     '/template/layout.html',
@@ -32,11 +38,14 @@ router.get('/', function(req, res) {
     return res.render('index', {
         _id: 123,
         name: "Offline",
-        text: "Lorem ispum..."
+        text: "Lorem ispum...",
+        img: ''
     });
 });
 
 router.get('/object/:id', function(req, res) {
+    console.log(req.params.id);
+
     Store
         .require("data")
         .findById(req.params.id, function(data) {

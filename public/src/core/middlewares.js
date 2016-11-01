@@ -1,7 +1,7 @@
 const middlewares = {
 
     NetworkFirst: function(req, res) {
-        Debug.log("network", req);
+        // Debug.log("network", req);
 
         if(!navigator.onLine && !res.notInCache) {
             return middlewares.CacheFirst(req, res);
@@ -11,9 +11,9 @@ const middlewares = {
             .then((response) => {
                 var cacheCopy = response.clone();
 
-                Debug.log(response);
+                //Debug.log(response);
 
-                if(response.type !== "opaque") {
+                if(response.type !== "opaque" && req.method == "GET") {
                     caches
                         .open(req.settings.version + "::" + req.settings.name)
                         .then(function add(cache) {
@@ -31,7 +31,7 @@ const middlewares = {
     },
 
     CacheFirst: function(req, res) {
-        Debug.log("cache", req);
+        //Debug.log("cache", req);
 
         return caches.match(req)
             .then((response) => {

@@ -15,7 +15,9 @@ Router.use = function(url, method, body, callbacks) {
         method: method,
         body: body,
         middlewares: callbacks
-    }
+    };
+
+    //Debug.log(Router.routes[url]);
 };
 
 Router.get = function(url, ...callbacks) {
